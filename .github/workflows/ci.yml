@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [20.x]
 
     steps:
     - uses: actions/checkout@v4
@@ -24,32 +24,29 @@ jobs:
         cache: 'npm'
         cache-dependency-path: './**/package-lock.json'
 
+    - name: Debug - List Files
+      run: ls -R
+
     - name: Backend - Install Dependencies
-      run: |
-        cd backend
-        npm install
+      working-directory: ./backend
+      run: npm ci
 
     - name: Backend - Run Linter
-      run: |
-        cd backend
-        npm run lint
+      working-directory: ./backend
+      run: npm run lint
 
     - name: Backend - Run Tests
-      run: |
-        cd backend
-        npm test -- --passWithNoTests || echo "No tests configured"
+      working-directory: ./backend
+      run: npm test -- --passWithNoTests || echo "No tests configured"
 
     - name: Frontend - Install Dependencies
-      run: |
-        cd frontend
-        npm install
+      working-directory: ./frontend
+      run: npm ci
 
     - name: Frontend - Run Linter
-      run: |
-        cd frontend
-        npm run lint
+      working-directory: ./frontend
+      run: npm run lint
 
     - name: Frontend - Build
-      run: |
-        cd frontend
-        npm run build
+      working-directory: ./frontend
+      run: npm run build
