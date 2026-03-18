@@ -112,7 +112,7 @@ const seedDB = async () => {
     await admin.save({ validateBeforeSave: false });
     
     // User
-    const testUser = await User.create({
+    await User.create({
       name: 'Test User',
       email: 'test@shopzen.com',
       password: await bcrypt.hash('test1234', 12),
@@ -139,8 +139,8 @@ const seedDB = async () => {
 
     console.log('🌱 Database seeded successfully!');
     process.exit();
-  } catch (error) {
-    console.error(`❌ Error seeding DB: ${error.message}`);
+  } catch (err) {
+    console.error(`❌ Error seeding DB: ${err.message}`);
     process.exit(1);
   }
 };

@@ -25,7 +25,7 @@ exports.protect = async (req, res, next) => {
     }
 
     next();
-  } catch (error) {
+  } catch {
     return res.status(401).json({ success: false, message: 'Token is invalid or expired' });
   }
 };
