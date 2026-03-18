@@ -21,28 +21,35 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: './**/package-lock.json'
 
-    - name: Install Backend Dependencies
+    - name: Backend - Install Dependencies
       run: |
         cd backend
         npm install
 
-    - name: Run Backend Tests
+    - name: Backend - Run Linter
       run: |
         cd backend
-        npm test || echo "No tests specified"
+        npm run lint
 
-    - name: Install Frontend Dependencies
+    - name: Backend - Run Tests
+      run: |
+        cd backend
+        npm test -- --passWithNoTests || echo "No tests configured"
+
+    - name: Frontend - Install Dependencies
       run: |
         cd frontend
         npm install
 
-    - name: Run Frontend Linter
+    - name: Frontend - Run Linter
       run: |
         cd frontend
         npm run lint
 
-    - name: Build Frontend
+    - name: Frontend - Build
       run: |
         cd frontend
         npm run build
