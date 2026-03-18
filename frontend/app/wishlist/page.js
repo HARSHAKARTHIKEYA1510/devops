@@ -25,7 +25,7 @@ export default function WishlistPage() {
       }
     };
     load();
-  }, [user]);
+  }, [user, toast]);
 
   if (!user) return (
     <div style={{ paddingTop: 70, minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '1.5rem' }}>

@@ -15,7 +15,7 @@ function StarRating({ rating, interactive = false, onRate }) {
     <div style={{ display: 'flex', gap: 4 }}>
       {[1, 2, 3, 4, 5].map((s) => (
         <span key={s} onClick={() => interactive && onRate && onRate(s)} onMouseEnter={() => interactive && setHover(s)} onMouseLeave={() => interactive && setHover(0)}
-          style={{ fontSize: interactive ? '1.5rem' : '1rem', color: s <= (interactive ? hover || rating : rating) ? '#fbbf24' : 'rgba(255,255,255,0.15)', cursor: interactive ? 'pointer' : 'default', transition: 'color 0.15s' }}>★</span>
+          style={{ fontSize: interactive ? '1.5rem' : '1rem', color: s <= (interactive ? hover || rating : rating) ? '#ffffff' : 'rgba(255,255,255,0.15)', cursor: interactive ? 'pointer' : 'default', transition: 'color 0.15s' }}>★</span>
       ))}
     </div>
   );
@@ -52,12 +52,12 @@ export default function ProductDetailPage() {
       finally { setLoading(false); }
     };
     if (id) load();
-  }, [id]);
+  }, [id, toast]);
 
   if (loading) return (
     <div style={{ paddingTop: 70, minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ width: 48, height: 48, border: '3px solid rgba(108,71,255,0.3)', borderTop: '3px solid #6c47ff', borderRadius: '50%', animation: 'spin-slow 0.8s linear infinite', margin: '0 auto 1rem' }} />
+        <div style={{ width: 48, height: 48, border: '3px solid rgba(255,255,255,0.3)', borderTop: '3px solid #ffffff', borderRadius: '50%', animation: 'spin-slow 0.8s linear infinite', margin: '0 auto 1rem' }} />
         <p style={{ color: 'rgba(255,255,255,0.4)' }}>Loading product...</p>
       </div>
     </div>
@@ -110,7 +110,7 @@ export default function ProductDetailPage() {
           <Link href="/" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Home</Link> /
           <Link href="/products" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Products</Link> /
           <Link href={`/products?category=${product.category}`} style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>{product.category}</Link> /
-          <span style={{ color: '#e8e8f0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{product.name}</span>
+          <span style={{ color: '#ffffff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{product.name}</span>
         </div>
 
         {/* Main Grid */}
@@ -127,7 +127,7 @@ export default function ProductDetailPage() {
             {images.length > 1 && (
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                 {images.map((img, i) => (
-                  <button key={i} onClick={() => setSelectedImg(i)} style={{ width: 72, height: 72, borderRadius: 12, overflow: 'hidden', border: `2px solid ${selectedImg === i ? '#6c47ff' : 'rgba(255,255,255,0.08)'}`, cursor: 'pointer', background: 'rgba(255,255,255,0.03)', padding: 0, transition: 'border-color 0.2s' }}>
+                  <button key={i} onClick={() => setSelectedImg(i)} style={{ width: 72, height: 72, borderRadius: 12, overflow: 'hidden', border: `2px solid ${selectedImg === i ? '#ffffff' : 'rgba(255,255,255,0.08)'}`, cursor: 'pointer', background: 'rgba(255,255,255,0.03)', padding: 0, transition: 'border-color 0.2s' }}>
                     {img.url ? <img src={img.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <span style={{ fontSize: '1.5rem' }}>📦</span>}
                   </button>
                 ))}
@@ -137,13 +137,13 @@ export default function ProductDetailPage() {
 
           {/* Info */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            {product.brand && <span style={{ color: '#a78bfa', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{product.brand}</span>}
+            {product.brand && <span style={{ color: '#ffffff', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{product.brand}</span>}
             <h1 style={{ fontFamily: 'var(--font-outfit)', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, color: '#fff', lineHeight: 1.3 }}>{product.name}</h1>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <StarRating rating={product.rating} />
               <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.875rem' }}>{product.rating?.toFixed(1)} ({product.numReviews} reviews)</span>
-              <span style={{ color: product.stock > 0 ? '#4ade80' : '#f87171', fontSize: '0.8rem', fontWeight: 600, padding: '0.2rem 0.6rem', borderRadius: 6, background: product.stock > 0 ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)' }}>{product.stock > 0 ? `✓ In Stock (${product.stock})` : '✕ Out of Stock'}</span>
+              <span style={{ color: product.stock > 0 ? '#ffffff' : '#ffffff', fontSize: '0.8rem', fontWeight: 600, padding: '0.2rem 0.6rem', borderRadius: 6, background: product.stock > 0 ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.1)' }}>{product.stock > 0 ? `✓ In Stock (${product.stock})` : '✕ Out of Stock'}</span>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem' }}>
@@ -151,7 +151,7 @@ export default function ProductDetailPage() {
               {product.originalPrice && product.originalPrice > product.price && (
                 <>
                   <span style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.35)', textDecoration: 'line-through' }}>₹{product.originalPrice.toLocaleString()}</span>
-                  <span style={{ background: 'linear-gradient(135deg,#6c47ff,#ec4899)', padding: '0.2rem 0.6rem', borderRadius: 8, fontSize: '0.8rem', fontWeight: 700, color: '#fff' }}>{discount}% OFF</span>
+                  <span style={{ background: 'linear-gradient(135deg,#ffffff,#ffffff)', padding: '0.2rem 0.6rem', borderRadius: 8, fontSize: '0.8rem', fontWeight: 700, color: '#fff' }}>{discount}% OFF</span>
                 </>
               )}
             </div>
@@ -161,10 +161,10 @@ export default function ProductDetailPage() {
             {/* Sizes */}
             {product.sizes?.length > 0 && (
               <div>
-                <div style={{ fontWeight: 600, color: '#fff', marginBottom: '0.6rem', fontSize: '0.9rem' }}>Size: <span style={{ color: '#a78bfa' }}>{selectedSize || 'Select size'}</span></div>
+                <div style={{ fontWeight: 600, color: '#fff', marginBottom: '0.6rem', fontSize: '0.9rem' }}>Size: <span style={{ color: '#ffffff' }}>{selectedSize || 'Select size'}</span></div>
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                   {product.sizes.map((s) => (
-                    <button key={s} onClick={() => setSelectedSize(s)} style={{ padding: '0.5rem 1rem', borderRadius: 10, border: `2px solid ${selectedSize === s ? '#6c47ff' : 'rgba(255,255,255,0.1)'}`, background: selectedSize === s ? 'rgba(108,71,255,0.2)' : 'transparent', color: selectedSize === s ? '#a78bfa' : 'rgba(255,255,255,0.6)', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem', transition: 'all 0.2s' }}>{s}</button>
+                    <button key={s} onClick={() => setSelectedSize(s)} style={{ padding: '0.5rem 1rem', borderRadius: 10, border: `2px solid ${selectedSize === s ? '#ffffff' : 'rgba(255,255,255,0.1)'}`, background: selectedSize === s ? 'rgba(255,255,255,0.2)' : 'transparent', color: selectedSize === s ? '#ffffff' : 'rgba(255,255,255,0.6)', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem', transition: 'all 0.2s' }}>{s}</button>
                   ))}
                 </div>
               </div>
@@ -173,10 +173,10 @@ export default function ProductDetailPage() {
             {/* Colors */}
             {product.colors?.length > 0 && (
               <div>
-                <div style={{ fontWeight: 600, color: '#fff', marginBottom: '0.6rem', fontSize: '0.9rem' }}>Color: <span style={{ color: '#a78bfa' }}>{selectedColor || 'Select color'}</span></div>
+                <div style={{ fontWeight: 600, color: '#fff', marginBottom: '0.6rem', fontSize: '0.9rem' }}>Color: <span style={{ color: '#ffffff' }}>{selectedColor || 'Select color'}</span></div>
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                   {product.colors.map((c) => (
-                    <button key={c} onClick={() => setSelectedColor(c)} style={{ padding: '0.5rem 0.875rem', borderRadius: 10, border: `2px solid ${selectedColor === c ? '#6c47ff' : 'rgba(255,255,255,0.1)'}`, background: selectedColor === c ? 'rgba(108,71,255,0.2)' : 'transparent', color: selectedColor === c ? '#a78bfa' : 'rgba(255,255,255,0.6)', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem', transition: 'all 0.2s' }}>{c}</button>
+                    <button key={c} onClick={() => setSelectedColor(c)} style={{ padding: '0.5rem 0.875rem', borderRadius: 10, border: `2px solid ${selectedColor === c ? '#ffffff' : 'rgba(255,255,255,0.1)'}`, background: selectedColor === c ? 'rgba(255,255,255,0.2)' : 'transparent', color: selectedColor === c ? '#ffffff' : 'rgba(255,255,255,0.6)', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem', transition: 'all 0.2s' }}>{c}</button>
                   ))}
                 </div>
               </div>
@@ -192,16 +192,16 @@ export default function ProductDetailPage() {
               <button onClick={handleAddToCart} disabled={product.stock === 0} className="btn btn-primary" style={{ flex: 1, minWidth: 160, height: 48, fontSize: '0.95rem' }}>
                 🛒 Add to Cart
               </button>
-              <button onClick={handleWishlist} style={{ width: 48, height: 48, borderRadius: 12, background: wishlisted ? 'rgba(239,68,68,0.15)' : 'rgba(255,255,255,0.05)', border: `1px solid ${wishlisted ? 'rgba(239,68,68,0.4)' : 'rgba(255,255,255,0.08)'}`, cursor: 'pointer', fontSize: '1.3rem', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', color: wishlisted ? '#f87171' : 'rgba(255,255,255,0.6)' }}>
+              <button onClick={handleWishlist} style={{ width: 48, height: 48, borderRadius: 12, background: wishlisted ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.05)', border: `1px solid ${wishlisted ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.08)'}`, cursor: 'pointer', fontSize: '1.3rem', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', color: wishlisted ? '#ffffff' : 'rgba(255,255,255,0.6)' }}>
                 {wishlisted ? '❤' : '♡'}
               </button>
             </div>
 
             {/* Shipping info */}
-            <div style={{ background: 'rgba(34,197,94,0.05)', border: '1px solid rgba(34,197,94,0.15)', borderRadius: 12, padding: '0.875rem 1rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+            <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 12, padding: '0.875rem 1rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
               <span style={{ fontSize: '1.2rem' }}>🚚</span>
               <div>
-                <div style={{ fontWeight: 600, color: '#4ade80', fontSize: '0.875rem' }}>Free Shipping</div>
+                <div style={{ fontWeight: 600, color: '#ffffff', fontSize: '0.875rem' }}>Free Shipping</div>
                 <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem' }}>On orders above ₹999. Estimated delivery in 3–5 business days.</div>
               </div>
             </div>
@@ -210,7 +210,7 @@ export default function ProductDetailPage() {
             {product.tags?.length > 0 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
                 {product.tags.map((t) => (
-                  <span key={t} style={{ padding: '0.25rem 0.6rem', borderRadius: 6, background: 'rgba(108,71,255,0.1)', color: '#a78bfa', fontSize: '0.75rem', fontWeight: 500 }}>#{t}</span>
+                  <span key={t} style={{ padding: '0.25rem 0.6rem', borderRadius: 6, background: 'rgba(255,255,255,0.1)', color: '#ffffff', fontSize: '0.75rem', fontWeight: 500 }}>#{t}</span>
                 ))}
               </div>
             )}
@@ -221,7 +221,7 @@ export default function ProductDetailPage() {
         <div style={{ marginBottom: '4rem' }}>
           <div style={{ display: 'flex', gap: '0.25rem', borderBottom: '1px solid rgba(255,255,255,0.06)', marginBottom: '2rem' }}>
             {['description', 'reviews', 'specifications'].map((tab) => (
-              <button key={tab} onClick={() => setActiveTab(tab)} style={{ padding: '0.75rem 1.5rem', background: 'none', border: 'none', borderBottom: `2px solid ${activeTab === tab ? '#6c47ff' : 'transparent'}`, color: activeTab === tab ? '#fff' : 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600, textTransform: 'capitalize', transition: 'all 0.2s', marginBottom: -1 }}>
+              <button key={tab} onClick={() => setActiveTab(tab)} style={{ padding: '0.75rem 1.5rem', background: 'none', border: 'none', borderBottom: `2px solid ${activeTab === tab ? '#ffffff' : 'transparent'}`, color: activeTab === tab ? '#fff' : 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600, textTransform: 'capitalize', transition: 'all 0.2s', marginBottom: -1 }}>
                 {tab} {tab === 'reviews' && `(${product.numReviews})`}
               </button>
             ))}
@@ -243,7 +243,7 @@ export default function ProductDetailPage() {
               ].map(([key, val]) => val && (
                 <div key={key} style={{ display: 'flex', padding: '0.875rem 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                   <span style={{ width: 160, color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem', flexShrink: 0 }}>{key}</span>
-                  <span style={{ color: '#e8e8f0', fontSize: '0.875rem' }}>{val}</span>
+                  <span style={{ color: '#ffffff', fontSize: '0.875rem' }}>{val}</span>
                 </div>
               ))}
             </div>
@@ -255,9 +255,9 @@ export default function ProductDetailPage() {
                 {product.reviews?.length > 0 ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     {product.reviews.map((r) => (
-                      <div key={r._id} style={{ padding: '1.25rem', background: '#13131a', borderRadius: 14, border: '1px solid rgba(255,255,255,0.06)' }}>
+                      <div key={r._id} style={{ padding: '1.25rem', background: '#0a0a0a', borderRadius: 14, border: '1px solid rgba(255,255,255,0.06)' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-                          <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'linear-gradient(135deg,#6c47ff,#ec4899)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: '#fff', fontSize: '0.85rem', flexShrink: 0 }}>{r.name?.charAt(0)}</div>
+                          <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'linear-gradient(135deg,#ffffff,#ffffff)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: '#fff', fontSize: '0.85rem', flexShrink: 0 }}>{r.name?.charAt(0)}</div>
                           <div>
                             <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.875rem' }}>{r.name}</div>
                             <StarRating rating={r.rating} />
@@ -275,7 +275,7 @@ export default function ProductDetailPage() {
 
               {/* Review Form */}
               {user && (
-                <div style={{ background: '#13131a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: '1.5rem' }}>
+                <div style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: '1.5rem' }}>
                   <h3 style={{ fontWeight: 700, color: '#fff', marginBottom: '1.25rem' }}>Write a Review</h3>
                   <form onSubmit={handleReview} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     <div>

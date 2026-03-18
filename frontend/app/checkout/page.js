@@ -107,12 +107,12 @@ export default function CheckoutPage() {
           {STEPS.map((s, i) => (
             <>
               <div key={s} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem' }}>
-                <div style={{ width: 36, height: 36, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.875rem', background: i <= step ? 'linear-gradient(135deg,#6c47ff,#a855f7)' : 'rgba(255,255,255,0.06)', color: i <= step ? '#fff' : 'rgba(255,255,255,0.3)', border: i === step ? '2px solid rgba(108,71,255,0.5)' : '1px solid transparent', transition: 'all 0.3s' }}>
+                <div style={{ width: 36, height: 36, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.875rem', background: i <= step ? 'linear-gradient(135deg,#ffffff,#cccccc)' : 'rgba(255,255,255,0.06)', color: i <= step ? '#fff' : 'rgba(255,255,255,0.3)', border: i === step ? '2px solid rgba(255,255,255,0.5)' : '1px solid transparent', transition: 'all 0.3s' }}>
                   {i < step ? '✓' : i + 1}
                 </div>
-                <span style={{ fontSize: '0.75rem', fontWeight: 500, color: i <= step ? '#a78bfa' : 'rgba(255,255,255,0.3)' }}>{s}</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 500, color: i <= step ? '#ffffff' : 'rgba(255,255,255,0.3)' }}>{s}</span>
               </div>
-              {i < STEPS.length - 1 && <div key={`line-${i}`} style={{ flex: 1, height: 2, background: i < step ? '#6c47ff' : 'rgba(255,255,255,0.06)', marginBottom: 18, mx: 8, transition: 'background 0.3s' }} />}
+              {i < STEPS.length - 1 && <div key={`line-${i}`} style={{ flex: 1, height: 2, background: i < step ? '#ffffff' : 'rgba(255,255,255,0.06)', marginBottom: 18, mx: 8, transition: 'background 0.3s' }} />}
             </>
           ))}
         </div>
@@ -122,7 +122,7 @@ export default function CheckoutPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {/* STEP 0: Address */}
             {step === 0 && (
-              <div style={{ background: '#13131a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 20, padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 20, padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <h2 style={{ fontWeight: 700, color: '#fff', fontSize: '1.1rem', marginBottom: '0.25rem' }}>📍 Shipping Address</h2>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                   <INPUT label="Full Name" value={address.fullName} onChange={updateAddress('fullName')} placeholder="John Doe" required />
@@ -144,7 +144,7 @@ export default function CheckoutPage() {
 
             {/* STEP 1: Payment */}
             {step === 1 && (
-              <div style={{ background: '#13131a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 20, padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <div style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 20, padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 <h2 style={{ fontWeight: 700, color: '#fff', fontSize: '1.1rem' }}>💳 Payment Method</h2>
                 {[
                   { id: 'card', label: 'Credit / Debit Card', icon: '💳' },
@@ -152,15 +152,15 @@ export default function CheckoutPage() {
                   { id: 'netbanking', label: 'Net Banking', icon: '🏦' },
                   { id: 'cod', label: 'Cash on Delivery', icon: '💵' },
                 ].map((m) => (
-                  <label key={m.id} style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', padding: '1rem 1.125rem', borderRadius: 14, background: payment === m.id ? 'rgba(108,71,255,0.12)' : 'rgba(255,255,255,0.03)', border: `1.5px solid ${payment === m.id ? 'rgba(108,71,255,0.5)' : 'rgba(255,255,255,0.06)'}`, cursor: 'pointer', transition: 'all 0.2s' }}>
-                    <input type="radio" name="payment" value={m.id} checked={payment === m.id} onChange={() => setPayment(m.id)} style={{ accentColor: '#6c47ff' }} />
+                  <label key={m.id} style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', padding: '1rem 1.125rem', borderRadius: 14, background: payment === m.id ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.03)', border: `1.5px solid ${payment === m.id ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.06)'}`, cursor: 'pointer', transition: 'all 0.2s' }}>
+                    <input type="radio" name="payment" value={m.id} checked={payment === m.id} onChange={() => setPayment(m.id)} style={{ accentColor: '#ffffff' }} />
                     <span style={{ fontSize: '1.25rem' }}>{m.icon}</span>
-                    <span style={{ fontWeight: 600, color: payment === m.id ? '#a78bfa' : '#e8e8f0', fontSize: '0.9rem' }}>{m.label}</span>
-                    {payment === m.id && m.id !== 'cod' && <span style={{ marginLeft: 'auto', color: '#4ade80', fontSize: '0.75rem' }}>✓ Selected</span>}
+                    <span style={{ fontWeight: 600, color: payment === m.id ? '#ffffff' : '#ffffff', fontSize: '0.9rem' }}>{m.label}</span>
+                    {payment === m.id && m.id !== 'cod' && <span style={{ marginLeft: 'auto', color: '#ffffff', fontSize: '0.75rem' }}>✓ Selected</span>}
                   </label>
                 ))}
                 {payment === 'card' && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', padding: '1rem', background: 'rgba(108,71,255,0.05)', borderRadius: 12 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', padding: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: 12 }}>
                     <INPUT label="Cardholder Name" value={cardDetails.name} onChange={(e) => setCardDetails((p) => ({ ...p, name: e.target.value }))} placeholder="John Doe" />
                     <INPUT label="Card Number" value={cardDetails.number} onChange={(e) => setCardDetails((p) => ({ ...p, number: e.target.value }))} placeholder="1234 5678 9012 3456" />
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.875rem' }}>
@@ -179,32 +179,32 @@ export default function CheckoutPage() {
             {/* STEP 2: Review */}
             {step === 2 && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div style={{ background: '#13131a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 20, padding: '1.5rem' }}>
+                <div style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 20, padding: '1.5rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                     <h3 style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>📍 Shipping To</h3>
-                    <button onClick={() => setStep(0)} style={{ color: '#a78bfa', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.8rem' }}>Edit</button>
+                    <button onClick={() => setStep(0)} style={{ color: '#ffffff', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.8rem' }}>Edit</button>
                   </div>
                   <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.875rem', lineHeight: 1.7 }}>{address.fullName}<br />{address.addressLine1}, {address.addressLine2}<br />{address.city}, {address.state} – {address.postalCode}<br />{address.phone}</p>
                 </div>
 
-                <div style={{ background: '#13131a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: '1.25rem' }}>
+                <div style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: '1.25rem' }}>
                   <h3 style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem', marginBottom: '0.5rem' }}>💳 Payment</h3>
                   <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.875rem', textTransform: 'capitalize' }}>{payment === 'cod' ? '💵 Cash on Delivery' : payment === 'card' ? '💳 Card ending ' + (cardDetails.number.slice(-4) || '****') : payment.toUpperCase()}</p>
                 </div>
 
-                <div style={{ background: '#13131a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <div style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   <h3 style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem', marginBottom: '0.5rem' }}>🎟 Coupon</h3>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <input className="input" value={couponCode} onChange={(e) => setCouponCode(e.target.value.toUpperCase())} placeholder="Enter coupon code" style={{ flex: 1 }} disabled={couponApplied} />
                     {couponApplied ? (
-                      <button onClick={() => { setCouponApplied(false); setCouponDiscount(0); setCouponCode(''); }} style={{ padding: '0 1rem', borderRadius: 10, background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.3)', color: '#f87171', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem', whiteSpace: 'nowrap' }}>Remove</button>
+                      <button onClick={() => { setCouponApplied(false); setCouponDiscount(0); setCouponCode(''); }} style={{ padding: '0 1rem', borderRadius: 10, background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', color: '#ffffff', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem', whiteSpace: 'nowrap' }}>Remove</button>
                     ) : (
-                      <button onClick={validateCoupon} disabled={validatingCoupon} style={{ padding: '0 1.25rem', borderRadius: 10, background: 'rgba(108,71,255,0.2)', border: '1px solid rgba(108,71,255,0.3)', color: '#a78bfa', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem', whiteSpace: 'nowrap' }}>
+                      <button onClick={validateCoupon} disabled={validatingCoupon} style={{ padding: '0 1.25rem', borderRadius: 10, background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.3)', color: '#ffffff', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem', whiteSpace: 'nowrap' }}>
                         {validatingCoupon ? '...' : 'Apply'}
                       </button>
                     )}
                   </div>
-                  {couponApplied && <p style={{ color: '#4ade80', fontSize: '0.8rem' }}>✓ Coupon applied! You saved ₹{couponDiscount}</p>}
+                  {couponApplied && <p style={{ color: '#ffffff', fontSize: '0.8rem' }}>✓ Coupon applied! You saved ₹{couponDiscount}</p>}
                 </div>
 
                 <div style={{ display: 'flex', gap: '0.75rem' }}>
@@ -218,7 +218,7 @@ export default function CheckoutPage() {
           </div>
 
           {/* Right: Order Summary */}
-          <div style={{ background: '#13131a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 20, padding: '1.75rem', position: 'sticky', top: 90 }}>
+          <div style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 20, padding: '1.75rem', position: 'sticky', top: 90 }}>
             <h2 style={{ fontWeight: 700, color: '#fff', marginBottom: '1.25rem', fontSize: '1.1rem' }}>Order Summary</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.25rem', maxHeight: 240, overflowY: 'auto' }}>
               {items.map((item) => (
@@ -227,7 +227,7 @@ export default function CheckoutPage() {
                     {item.images?.[0]?.url ? <img src={item.images[0].url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '📦'}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '0.8rem', color: '#e8e8f0', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</div>
+                    <div style={{ fontSize: '0.8rem', color: '#ffffff', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</div>
                     <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)' }}>Qty: {item.quantity}</div>
                   </div>
                   <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.875rem', flexShrink: 0 }}>₹{(item.price * item.quantity).toLocaleString()}</div>
@@ -243,7 +243,7 @@ export default function CheckoutPage() {
               ].map(([l, v]) => (
                 <div key={l} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
                   <span style={{ color: 'rgba(255,255,255,0.5)' }}>{l}</span>
-                  <span style={{ color: l.includes('Discount') ? '#4ade80' : '#e8e8f0' }}>{v}</span>
+                  <span style={{ color: l.includes('Discount') ? '#ffffff' : '#ffffff' }}>{v}</span>
                 </div>
               ))}
               <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '0.75rem', display: 'flex', justifyContent: 'space-between' }}>

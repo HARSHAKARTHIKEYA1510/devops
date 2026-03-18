@@ -6,13 +6,13 @@ import { useToast } from '@/context/ToastContext';
 import Link from 'next/link';
 
 const STATUS_CONFIG = {
-  placed: { color: '#a78bfa', bg: 'rgba(108,71,255,0.1)', icon: '📋' },
-  confirmed: { color: '#60a5fa', bg: 'rgba(96,165,250,0.1)', icon: '✅' },
-  processing: { color: '#fbbf24', bg: 'rgba(251,191,36,0.1)', icon: '⚙️' },
-  shipped: { color: '#34d399', bg: 'rgba(52,211,153,0.1)', icon: '🚚' },
-  delivered: { color: '#4ade80', bg: 'rgba(74,222,128,0.1)', icon: '📦' },
-  cancelled: { color: '#f87171', bg: 'rgba(248,113,113,0.1)', icon: '✕' },
-  returned: { color: '#fb923c', bg: 'rgba(251,146,60,0.1)', icon: '↩️' },
+  placed: { color: '#ffffff', bg: 'rgba(255,255,255,0.1)', icon: '📋' },
+  confirmed: { color: '#ffffff', bg: 'rgba(255,255,255,0.1)', icon: '✅' },
+  processing: { color: '#ffffff', bg: 'rgba(255,255,255,0.1)', icon: '⚙️' },
+  shipped: { color: '#ffffff', bg: 'rgba(255,255,255,0.1)', icon: '🚚' },
+  delivered: { color: '#ffffff', bg: 'rgba(255,255,255,0.1)', icon: '📦' },
+  cancelled: { color: '#ffffff', bg: 'rgba(255,255,255,0.1)', icon: '✕' },
+  returned: { color: '#ffffff', bg: 'rgba(255,255,255,0.1)', icon: '↩️' },
 };
 
 export default function OrdersPage() {
@@ -32,7 +32,7 @@ export default function OrdersPage() {
       finally { setLoading(false); }
     };
     load();
-  }, [user, filter]);
+  }, [user, filter, toast]);
 
   if (!user) return (
     <div style={{ paddingTop: 70, minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '1.5rem' }}>
@@ -51,7 +51,7 @@ export default function OrdersPage() {
           {['', 'placed', 'confirmed', 'shipped', 'delivered', 'cancelled'].map((s) => {
             const config = s ? STATUS_CONFIG[s] : null;
             return (
-              <button key={s || 'all'} onClick={() => setFilter(s)} style={{ padding: '0.4rem 1rem', borderRadius: 999, background: filter === s ? 'rgba(108,71,255,0.2)' : 'rgba(255,255,255,0.04)', border: `1px solid ${filter === s ? 'rgba(108,71,255,0.4)' : 'rgba(255,255,255,0.07)'}`, color: filter === s ? '#a78bfa' : 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600, transition: 'all 0.2s', textTransform: 'capitalize' }}>
+              <button key={s || 'all'} onClick={() => setFilter(s)} style={{ padding: '0.4rem 1rem', borderRadius: 999, background: filter === s ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.04)', border: `1px solid ${filter === s ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.07)'}`, color: filter === s ? '#ffffff' : 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600, transition: 'all 0.2s', textTransform: 'capitalize' }}>
                 {config?.icon} {s || 'All Orders'}
               </button>
             );
@@ -75,8 +75,8 @@ export default function OrdersPage() {
               const sc = STATUS_CONFIG[order.orderStatus] || STATUS_CONFIG.placed;
               return (
                 <Link key={order._id} href={`/orders/${order._id}`} style={{ textDecoration: 'none' }}>
-                  <div style={{ background: '#13131a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 18, padding: '1.5rem', cursor: 'pointer', transition: 'all 0.25s' }}
-                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(108,71,255,0.3)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                  <div style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 18, padding: '1.5rem', cursor: 'pointer', transition: 'all 0.25s' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.transform = 'none'; }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
                       <div>

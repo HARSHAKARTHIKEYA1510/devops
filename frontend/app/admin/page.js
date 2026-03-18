@@ -31,16 +31,16 @@ export default function AdminDashboard() {
       }
     };
     loadStats();
-  }, [user, authLoading, router]);
+  }, [user, authLoading, router, toast]);
 
   if (authLoading || loading) return (
     <div style={{ paddingTop: 70, minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ width: 48, height: 48, border: '3px solid rgba(108,71,255,0.3)', borderTop: '3px solid #6c47ff', borderRadius: '50%', animation: 'spin-slow 0.8s linear infinite' }} />
+      <div style={{ width: 48, height: 48, border: '3px solid rgba(255,255,255,0.3)', borderTop: '3px solid #ffffff', borderRadius: '50%', animation: 'spin-slow 0.8s linear infinite' }} />
     </div>
   );
 
   return (
-    <div style={{ paddingTop: 70, minHeight: '100vh', background: '#0a0a0f' }}>
+    <div style={{ paddingTop: 70, minHeight: '100vh', background: '#000000' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '2.5rem 1.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
@@ -55,11 +55,11 @@ export default function AdminDashboard() {
         {/* Top Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
           {[
-            { label: 'Total Revenue', value: `₹${stats?.totalRevenue?.toLocaleString() || 0}`, icon: '💰', color: '#4ade80', bg: 'rgba(74,222,128,0.1)' },
-            { label: 'Total Orders', value: stats?.totalOrders || 0, icon: '📦', color: '#60a5fa', bg: 'rgba(96,165,250,0.1)' },
-            { label: 'Avg. Order Value', value: stats?.totalOrders ? `₹${Math.round(stats.totalRevenue / stats.totalOrders).toLocaleString()}` : '₹0', icon: '📈', color: '#a78bfa', bg: 'rgba(167,139,250,0.1)' },
+            { label: 'Total Revenue', value: `₹${stats?.totalRevenue?.toLocaleString() || 0}`, icon: '💰', color: '#ffffff', bg: 'rgba(255,255,255,0.1)' },
+            { label: 'Total Orders', value: stats?.totalOrders || 0, icon: '📦', color: '#ffffff', bg: 'rgba(255,255,255,0.1)' },
+            { label: 'Avg. Order Value', value: stats?.totalOrders ? `₹${Math.round(stats.totalRevenue / stats.totalOrders).toLocaleString()}` : '₹0', icon: '📈', color: '#ffffff', bg: 'rgba(255,255,255,0.1)' },
           ].map((c) => (
-            <div key={c.label} style={{ background: '#13131a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 20, padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div key={c.label} style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 20, padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <div style={{ width: 56, height: 56, borderRadius: 14, background: c.bg, color: c.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', flexShrink: 0 }}>
                 {c.icon}
               </div>
@@ -73,7 +73,7 @@ export default function AdminDashboard() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
           {/* Recent Orders */}
-          <div style={{ background: '#13131a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 20, padding: '1.75rem' }}>
+          <div style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 20, padding: '1.75rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
               <h2 style={{ fontWeight: 700, color: '#fff', fontSize: '1.1rem' }}>Recent Orders</h2>
               <button className="btn btn-outline" style={{ padding: '0.4rem 1rem', fontSize: '0.8rem' }}>View All</button>
@@ -93,12 +93,12 @@ export default function AdminDashboard() {
                 <tbody>
                   {stats?.recentOrders?.map((o) => (
                     <tr key={o._id} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
-                      <td style={{ padding: '1rem 0', color: '#e8e8f0', fontSize: '0.875rem', fontWeight: 500 }}>#{o.orderNumber}</td>
+                      <td style={{ padding: '1rem 0', color: '#ffffff', fontSize: '0.875rem', fontWeight: 500 }}>#{o.orderNumber}</td>
                       <td style={{ padding: '1rem 0', color: 'rgba(255,255,255,0.7)', fontSize: '0.875rem' }}>{o.user?.name || 'Unknown'}</td>
                       <td style={{ padding: '1rem 0', color: 'rgba(255,255,255,0.5)', fontSize: '0.875rem' }}>{new Date(o.createdAt).toLocaleDateString()}</td>
                       <td style={{ padding: '1rem 0', color: '#fff', fontSize: '0.875rem', fontWeight: 600 }}>₹{o.total.toLocaleString()}</td>
                       <td style={{ padding: '1rem 0' }}>
-                        <span style={{ padding: '0.25rem 0.6rem', borderRadius: 6, fontSize: '0.75rem', fontWeight: 600, background: 'rgba(108,71,255,0.1)', color: '#a78bfa' }}>
+                        <span style={{ padding: '0.25rem 0.6rem', borderRadius: 6, fontSize: '0.75rem', fontWeight: 600, background: 'rgba(255,255,255,0.1)', color: '#ffffff' }}>
                           {o.orderStatus}
                         </span>
                       </td>

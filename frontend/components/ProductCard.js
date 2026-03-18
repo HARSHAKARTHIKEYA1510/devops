@@ -10,7 +10,7 @@ function StarRating({ rating, size = 14 }) {
   return (
     <div style={{ display: 'flex', gap: 2 }}>
       {[1, 2, 3, 4, 5].map((s) => (
-        <span key={s} style={{ fontSize: size, color: s <= Math.round(rating) ? '#fbbf24' : 'rgba(255,255,255,0.15)' }}>★</span>
+        <span key={s} style={{ fontSize: size, color: s <= Math.round(rating) ? '#ffffff' : 'rgba(255,255,255,0.15)' }}>★</span>
       ))}
     </div>
   );
@@ -60,27 +60,27 @@ export default function ProductCard({ product }) {
               onMouseEnter={(e) => e.target.style.transform = 'scale(1.08)'}
               onMouseLeave={(e) => e.target.style.transform = 'scale(1)'} />
           ) : (
-            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', background: 'linear-gradient(135deg, rgba(108,71,255,0.1), rgba(236,72,153,0.1))' }}>📦</div>
+            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', background: 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(200,200,200,0.1))' }}>📦</div>
           )}
 
           {/* Badges */}
           <div style={{ position: 'absolute', top: '0.75rem', left: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
             {discount > 0 && (
-              <span style={{ background: 'linear-gradient(135deg,#6c47ff,#ec4899)', color: '#fff', fontSize: '0.7rem', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: 6 }}>-{discount}% OFF</span>
+              <span style={{ background: 'linear-gradient(135deg,#ffffff,#ffffff)', color: '#fff', fontSize: '0.7rem', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: 6 }}>-{discount}% OFF</span>
             )}
             {product.stock <= 5 && product.stock > 0 && (
-              <span style={{ background: 'rgba(251,191,36,0.18)', color: '#fbbf24', fontSize: '0.7rem', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: 6 }}>Few Left</span>
+              <span style={{ background: 'rgba(255,255,255,0.18)', color: '#ffffff', fontSize: '0.7rem', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: 6 }}>Few Left</span>
             )}
             {product.stock === 0 && (
-              <span style={{ background: 'rgba(239,68,68,0.18)', color: '#f87171', fontSize: '0.7rem', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: 6 }}>Out of Stock</span>
+              <span style={{ background: 'rgba(255,255,255,0.18)', color: '#ffffff', fontSize: '0.7rem', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: 6 }}>Out of Stock</span>
             )}
             {product.isFeatured && (
-              <span style={{ background: 'rgba(255,215,0,0.15)', color: '#ffd700', fontSize: '0.7rem', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: 6 }}>⭐ Featured</span>
+              <span style={{ background: 'rgba(255,215,0,0.15)', color: '#ffffff', fontSize: '0.7rem', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: 6 }}>⭐ Featured</span>
             )}
           </div>
 
           {/* Wishlist */}
-          <button onClick={handleWishlist} style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', width: 36, height: 36, borderRadius: '50%', background: 'rgba(10,10,15,0.7)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.1rem', transition: 'all 0.2s', color: wishlisted ? '#f87171' : 'rgba(255,255,255,0.6)' }}>
+          <button onClick={handleWishlist} style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', width: 36, height: 36, borderRadius: '50%', background: 'rgba(10,10,15,0.7)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.1rem', transition: 'all 0.2s', color: wishlisted ? '#ffffff' : 'rgba(255,255,255,0.6)' }}>
             {wishlisted ? '❤' : '♡'}
           </button>
         </div>
@@ -88,9 +88,9 @@ export default function ProductCard({ product }) {
         {/* Info */}
         <div style={{ padding: '1rem' }}>
           {product.brand && (
-            <span style={{ fontSize: '0.7rem', color: 'rgba(108,71,255,0.8)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{product.brand}</span>
+            <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.8)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{product.brand}</span>
           )}
-          <h3 style={{ margin: '0.25rem 0 0.5rem', fontSize: '0.9rem', fontWeight: 600, color: '#e8e8f0', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+          <h3 style={{ margin: '0.25rem 0 0.5rem', fontSize: '0.9rem', fontWeight: 600, color: '#ffffff', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
             {product.name}
           </h3>
 
@@ -109,10 +109,10 @@ export default function ProductCard({ product }) {
               )}
             </div>
             <button onClick={handleAddToCart} disabled={product.stock === 0 || addingToCart} style={{
-              padding: '0.5rem 0.875rem', borderRadius: 10, background: addingToCart ? 'rgba(34,197,94,0.2)' : 'rgba(108,71,255,0.15)', border: '1px solid rgba(108,71,255,0.3)', color: addingToCart ? '#4ade80' : '#a78bfa', cursor: product.stock === 0 ? 'not-allowed' : 'pointer', fontSize: '0.8rem', fontWeight: 600, transition: 'all 0.2s', whiteSpace: 'nowrap', opacity: product.stock === 0 ? 0.5 : 1,
+              padding: '0.5rem 0.875rem', borderRadius: 10, background: addingToCart ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', color: addingToCart ? '#ffffff' : '#ffffff', cursor: product.stock === 0 ? 'not-allowed' : 'pointer', fontSize: '0.8rem', fontWeight: 600, transition: 'all 0.2s', whiteSpace: 'nowrap', opacity: product.stock === 0 ? 0.5 : 1,
             }}
-              onMouseEnter={(e) => { if (product.stock > 0) { e.currentTarget.style.background = 'rgba(108,71,255,0.3)'; } }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = addingToCart ? 'rgba(34,197,94,0.2)' : 'rgba(108,71,255,0.15)'; }}>
+              onMouseEnter={(e) => { if (product.stock > 0) { e.currentTarget.style.background = 'rgba(255,255,255,0.3)'; } }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = addingToCart ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.15)'; }}>
               {addingToCart ? '✓ Added' : '+ Cart'}
             </button>
           </div>

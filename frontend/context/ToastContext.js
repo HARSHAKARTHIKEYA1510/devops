@@ -25,10 +25,10 @@ export function ToastProvider({ children }) {
 
   const icons = { success: '✓', error: '✕', info: 'ℹ', warning: '⚠' };
   const colors = {
-    success: { bg: 'rgba(34,197,94,0.15)', border: 'rgba(34,197,94,0.4)', icon: '#4ade80' },
-    error: { bg: 'rgba(239,68,68,0.15)', border: 'rgba(239,68,68,0.4)', icon: '#f87171' },
-    info: { bg: 'rgba(108,71,255,0.15)', border: 'rgba(108,71,255,0.4)', icon: '#a78bfa' },
-    warning: { bg: 'rgba(251,191,36,0.15)', border: 'rgba(251,191,36,0.4)', icon: '#fbbf24' },
+    success: { bg: 'rgba(255,255,255,0.15)', border: 'rgba(255,255,255,0.4)', icon: '#ffffff' },
+    error: { bg: 'rgba(255,255,255,0.15)', border: 'rgba(255,255,255,0.4)', icon: '#ffffff' },
+    info: { bg: 'rgba(255,255,255,0.15)', border: 'rgba(255,255,255,0.4)', icon: '#ffffff' },
+    warning: { bg: 'rgba(255,255,255,0.15)', border: 'rgba(255,255,255,0.4)', icon: '#ffffff' },
   };
 
   return (
@@ -56,7 +56,7 @@ export function ToastProvider({ children }) {
                 alignItems: 'center', justifyContent: 'center',
                 color: c.icon, fontWeight: 700, flexShrink: 0,
               }}>{icons[t.type]}</span>
-              <span style={{ fontSize: '0.875rem', color: '#e8e8f0', flex: 1 }}>{t.message}</span>
+              <span style={{ fontSize: '0.875rem', color: '#ffffff', flex: 1 }}>{t.message}</span>
             </div>
           );
         })}

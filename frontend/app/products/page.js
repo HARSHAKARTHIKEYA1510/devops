@@ -1,5 +1,6 @@
 'use client';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import ProductCard from '@/components/ProductCard';
 import { productsApi } from '@/lib/api';
 
@@ -19,8 +20,17 @@ const PRICE_RANGES = [
   { label: '₹10,000+', min: '10000', max: '' },
 ];
 
-export default function ProductsPage({ searchParams }) {
-  const sp = searchParams || {};
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProductsContent />
+    </Suspense>
+  );
+}
+
+function ProductsContent() {
+  const searchParams = useSearchParams();
+  
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,14 +38,14 @@ export default function ProductsPage({ searchParams }) {
   const [totalPages, setTotalPages] = useState(1);
 
   const [filters, setFilters] = useState({
-    keyword: sp.keyword || '',
-    category: sp.category || '',
-    sort: sp.sort || 'newest',
-    minPrice: sp.minPrice || '',
-    maxPrice: sp.maxPrice || '',
-    inStock: sp.inStock === 'true',
-    isFeatured: sp.isFeatured === 'true',
-    page: Number(sp.page) || 1,
+    keyword: searchParams.get('keyword') || '',
+    category: searchParams.get('category') || '',
+    sort: searchParams.get('sort') || 'newest',
+    minPrice: searchParams.get('minPrice') || '',
+    maxPrice: searchParams.get('maxPrice') || '',
+    inStock: searchParams.get('inStock') === 'true',
+    isFeatured: searchParams.get('isFeatured') === 'true',
+    page: Number(searchParams.get('page')) || 1,
   });
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -83,7 +93,7 @@ export default function ProductsPage({ searchParams }) {
         <div style={{ fontWeight: 700, color: '#fff', marginBottom: '0.75rem', fontSize: '0.9rem' }}>Categories</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
           {[{ name: 'All', count: total }, ...categories].map((cat) => (
-            <button key={cat.name} onClick={() => updateFilter('category', cat.name === 'All' ? '' : cat.name)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0.75rem', borderRadius: 10, background: filters.category === (cat.name === 'All' ? '' : cat.name) ? 'rgba(108,71,255,0.2)' : 'transparent', border: '1px solid', borderColor: filters.category === (cat.name === 'All' ? '' : cat.name) ? 'rgba(108,71,255,0.4)' : 'transparent', color: filters.category === (cat.name === 'All' ? '' : cat.name) ? '#a78bfa' : 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: '0.875rem', textAlign: 'left', transition: 'all 0.2s' }}>
+            <button key={cat.name} onClick={() => updateFilter('category', cat.name === 'All' ? '' : cat.name)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0.75rem', borderRadius: 10, background: filters.category === (cat.name === 'All' ? '' : cat.name) ? 'rgba(255,255,255,0.2)' : 'transparent', border: '1px solid', borderColor: filters.category === (cat.name === 'All' ? '' : cat.name) ? 'rgba(255,255,255,0.4)' : 'transparent', color: filters.category === (cat.name === 'All' ? '' : cat.name) ? '#ffffff' : 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: '0.875rem', textAlign: 'left', transition: 'all 0.2s' }}>
               {cat.name}
               {cat.count !== undefined && <span style={{ fontSize: '0.75rem', opacity: 0.6 }}>({cat.count})</span>}
             </button>
@@ -98,9 +108,9 @@ export default function ProductsPage({ searchParams }) {
           {PRICE_RANGES.map((range) => {
             const active = filters.minPrice === range.min && filters.maxPrice === range.max;
             return (
-              <button key={range.label} onClick={() => setFilters((p) => ({ ...p, minPrice: range.min, maxPrice: range.max, page: 1 }))} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 0.75rem', borderRadius: 10, background: active ? 'rgba(108,71,255,0.2)' : 'transparent', border: `1px solid ${active ? 'rgba(108,71,255,0.4)' : 'transparent'}`, color: active ? '#a78bfa' : 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: '0.875rem', textAlign: 'left', transition: 'all 0.2s' }}>
-                <span style={{ width: 14, height: 14, borderRadius: '50%', border: `2px solid ${active ? '#a78bfa' : 'rgba(255,255,255,0.3)'}`, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  {active && <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#a78bfa' }} />}
+              <button key={range.label} onClick={() => setFilters((p) => ({ ...p, minPrice: range.min, maxPrice: range.max, page: 1 }))} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 0.75rem', borderRadius: 10, background: active ? 'rgba(255,255,255,0.2)' : 'transparent', border: `1px solid ${active ? 'rgba(255,255,255,0.4)' : 'transparent'}`, color: active ? '#ffffff' : 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: '0.875rem', textAlign: 'left', transition: 'all 0.2s' }}>
+                <span style={{ width: 14, height: 14, borderRadius: '50%', border: `2px solid ${active ? '#ffffff' : 'rgba(255,255,255,0.3)'}`, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {active && <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#ffffff' }} />}
                 </span>
                 {range.label}
               </button>
@@ -116,7 +126,7 @@ export default function ProductsPage({ searchParams }) {
           { key: 'isFeatured', label: 'Featured Only' },
         ].map(({ key, label }) => (
           <label key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
-            <div onClick={() => updateFilter(key, !filters[key])} style={{ width: 42, height: 24, borderRadius: 12, background: filters[key] ? '#6c47ff' : 'rgba(255,255,255,0.1)', position: 'relative', transition: 'background 0.3s', cursor: 'pointer', flexShrink: 0 }}>
+            <div onClick={() => updateFilter(key, !filters[key])} style={{ width: 42, height: 24, borderRadius: 12, background: filters[key] ? '#ffffff' : 'rgba(255,255,255,0.1)', position: 'relative', transition: 'background 0.3s', cursor: 'pointer', flexShrink: 0 }}>
               <div style={{ width: 18, height: 18, borderRadius: '50%', background: '#fff', position: 'absolute', top: 3, left: filters[key] ? 21 : 3, transition: 'left 0.3s' }} />
             </div>
             <span style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.7)' }}>{label}</span>
@@ -140,8 +150,8 @@ export default function ProductsPage({ searchParams }) {
             <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem' }}>{loading ? '...' : `${total} products found`}</p>
           </div>
           <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-            <select value={filters.sort} onChange={(e) => updateFilter('sort', e.target.value)} style={{ padding: '0.6rem 1rem', borderRadius: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: '#e8e8f0', fontSize: '0.875rem', cursor: 'pointer', outline: 'none' }}>
-              {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value} style={{ background: '#13131a' }}>{o.label}</option>)}
+            <select value={filters.sort} onChange={(e) => updateFilter('sort', e.target.value)} style={{ padding: '0.6rem 1rem', borderRadius: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: '#ffffff', fontSize: '0.875rem', cursor: 'pointer', outline: 'none' }}>
+              {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value} style={{ background: '#0a0a0a' }}>{o.label}</option>)}
             </select>
             <button onClick={() => setSidebarOpen(!sidebarOpen)} className="btn btn-outline" style={{ padding: '0.6rem 1rem', fontSize: '0.875rem' }}>☰ Filters</button>
           </div>
@@ -150,7 +160,7 @@ export default function ProductsPage({ searchParams }) {
         <div style={{ display: 'grid', gridTemplateColumns: sidebarOpen ? '260px 1fr' : '1fr', gap: '2rem', transition: 'all 0.3s' }}>
           {/* Sidebar */}
           {sidebarOpen && (
-            <aside style={{ background: '#13131a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: '1.5rem', height: 'fit-content', position: 'sticky', top: 90 }}>
+            <aside style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: '1.5rem', height: 'fit-content', position: 'sticky', top: 90 }}>
               <SidebarContent />
             </aside>
           )}
@@ -171,7 +181,7 @@ export default function ProductsPage({ searchParams }) {
                 {totalPages > 1 && (
                   <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '3rem' }}>
                     {[...Array(totalPages)].map((_, i) => (
-                      <button key={i} onClick={() => setFilters((prev) => ({ ...prev, page: i + 1 }))} style={{ width: 40, height: 40, borderRadius: 10, background: filters.page === i + 1 ? '#6c47ff' : 'rgba(255,255,255,0.05)', border: '1px solid', borderColor: filters.page === i + 1 ? '#6c47ff' : 'rgba(255,255,255,0.08)', color: filters.page === i + 1 ? '#fff' : 'rgba(255,255,255,0.6)', cursor: 'pointer', fontWeight: 600, transition: 'all 0.2s' }}>
+                      <button key={i} onClick={() => setFilters((prev) => ({ ...prev, page: i + 1 }))} style={{ width: 40, height: 40, borderRadius: 10, background: filters.page === i + 1 ? '#ffffff' : 'rgba(255,255,255,0.05)', border: '1px solid', borderColor: filters.page === i + 1 ? '#ffffff' : 'rgba(255,255,255,0.08)', color: filters.page === i + 1 ? '#fff' : 'rgba(255,255,255,0.6)', cursor: 'pointer', fontWeight: 600, transition: 'all 0.2s' }}>
                         {i + 1}
                       </button>
                     ))}

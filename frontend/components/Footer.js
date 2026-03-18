@@ -10,8 +10,8 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg,#6c47ff,#ec4899)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem' }}>⚡</div>
-              <span style={{ fontFamily: 'var(--font-outfit)', fontWeight: 700, fontSize: '1.25rem', color: '#fff' }}>ShopZen</span>
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg,#ffffff,#ffffff)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem' }}>⚡</div>
+              <span style={{ fontFamily: 'var(--font-outfit)', fontWeight: 700, fontSize: '1.25rem', color: '#fff' }}>SHOP</span>
             </div>
             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.875rem', lineHeight: 1.7, marginBottom: '1.5rem' }}>
               Your premium destination for quality products at unbeatable prices. Shop smarter, live better.
@@ -19,7 +19,7 @@ export default function Footer() {
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               {['Twitter', 'Instagram', 'Facebook', 'YouTube'].map((s) => (
                 <a key={s} href="#" style={{ width: 36, height: 36, borderRadius: 9, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.5)', fontSize: '0.75rem', textDecoration: 'none', transition: 'all 0.2s' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(108,71,255,0.2)'; e.currentTarget.style.color = '#a78bfa'; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = '#ffffff'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}>
                   {s.charAt(0)}
                 </a>
@@ -39,7 +39,7 @@ export default function Footer() {
                 {links.map(([label, href]) => (
                   <li key={label}>
                     <Link href={href} style={{ color: 'rgba(255,255,255,0.5)', textDecoration: 'none', fontSize: '0.875rem', transition: 'color 0.2s' }}
-                      onMouseEnter={(e) => e.target.style.color = '#a78bfa'}
+                      onMouseEnter={(e) => e.target.style.color = '#ffffff'}
                       onMouseLeave={(e) => e.target.style.color = 'rgba(255,255,255,0.5)'}>
                       {label}
                     </Link>
@@ -61,7 +61,7 @@ export default function Footer() {
         </div>
 
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem' }}>© {year} ShopZen. All rights reserved.</p>
+          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem' }}>© {year} SHOP. All rights reserved.</p>
           <div style={{ display: 'flex', gap: '1.5rem' }}>
             {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((l) => (
               <a key={l} href="#" style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', textDecoration: 'none' }}>{l}</a>

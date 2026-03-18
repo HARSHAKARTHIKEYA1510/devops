@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useContext, useReducer, useEffect } from 'react';
+import { createContext, useContext, useReducer, useEffect, useState } from 'react';
 import { useToast } from './ToastContext';
 
 const CartContext = createContext(null);
@@ -31,12 +31,12 @@ const cartReducer = (state, action) => {
       };
     case 'UPDATE_QTY':
       if (action.payload.quantity <= 0) {
-        return { ...state, items: state.items.filter((i) => !(i._id === action.payload._id && i.size === action.payload.size)) };
+        return { ...state, items: state.items.filter((i) => !(i._id === action.payload._id && i.size === action.payload.size && i.color === action.payload.color)) };
       }
       return {
         ...state,
         items: state.items.map((i) =>
-          i._id === action.payload._id && i.size === action.payload.size
+          i._id === action.payload._id && i.size === action.payload.size && i.color === action.payload.color
             ? { ...i, quantity: action.payload.quantity }
             : i
         ),
@@ -62,9 +62,14 @@ export function CartProvider({ children }) {
     }
   }, []);
 
+  const [initialized, setInitialized] = useState(false);
   useEffect(() => {
+    if (!initialized) {
+      setInitialized(true);
+      return;
+    }
     localStorage.setItem('cart', JSON.stringify(state.items));
-  }, [state.items]);
+  }, [state.items, initialized]);
 
   const addItem = (product, quantity = 1, size = '', color = '') => {
     dispatch({ type: 'ADD_ITEM', payload: { ...product, quantity, size, color } });
@@ -75,8 +80,8 @@ export function CartProvider({ children }) {
     dispatch({ type: 'REMOVE_ITEM', payload: { _id: id, size, color } });
   };
 
-  const updateQty = (id, quantity, size = '') => {
-    dispatch({ type: 'UPDATE_QTY', payload: { _id: id, quantity, size } });
+  const updateQty = (id, quantity, size = '', color = '') => {
+    dispatch({ type: 'UPDATE_QTY', payload: { _id: id, quantity, size, color } });
   };
 
   const clearCart = () => dispatch({ type: 'CLEAR' });

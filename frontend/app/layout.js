@@ -10,11 +10,11 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit' });
 
 export const metadata = {
-  title: 'ShopZen – Premium Ecommerce',
+  title: 'SHOP – Premium Ecommerce',
   description: 'Discover the best products at unbeatable prices. Shop electronics, fashion, home goods and more.',
   keywords: 'ecommerce, shop, buy online, products, best deals',
   openGraph: {
-    title: 'ShopZen – Premium Ecommerce',
+    title: 'SHOP – Premium Ecommerce',
     description: 'Discover the best products at unbeatable prices.',
     type: 'website',
   },

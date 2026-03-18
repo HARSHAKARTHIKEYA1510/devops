@@ -37,7 +37,7 @@ export function AuthProvider({ children }) {
     const data = await authApi.register({ name, email, password, phone });
     localStorage.setItem('token', data.token);
     setUser(data.user);
-    toast.success(`Welcome to ShopZen, ${data.user.name}!`);
+    toast.success(`Welcome to SHOP, ${data.user.name}!`);
     return data;
   };
 
