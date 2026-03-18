@@ -71,8 +71,8 @@ const generateProducts = () => {
       isFeatured: Math.random() > 0.85,
       rating: parseFloat((Math.random() * 2 + 3).toFixed(1)),
       numReviews: Math.floor(Math.random() * 300) + 10,
-      // Using Unsplash source for more relevant category images
-      images: [{ url: `https://images.unsplash.com/photo-${i}?auto=format&fit=crop&w=800&q=60&sig=${i}&${cat.imgKeyword}` }],
+      // Using LoremFlickr for reliable category-specific images
+      images: [{ url: `https://loremflickr.com/800/800/${cat.imgKeyword}?lock=${i}` }],
       isActive: true,
       colors: ['Black', 'White', 'Midnight', 'Slate'],
       sizes: cat.name === 'Electronics' ? [] : ['S', 'M', 'L', 'XL', 'XXL', '10', '11', '12']
