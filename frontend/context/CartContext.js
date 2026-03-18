@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useContext, useReducer, useEffect, useState } from 'react';
+import { createContext, useContext, useReducer, useEffect, useState, useRef } from 'react';
 import { useToast } from './ToastContext';
 
 const CartContext = createContext(null);
@@ -62,14 +62,14 @@ export function CartProvider({ children }) {
     }
   }, []);
 
-  const [initialized, setInitialized] = useState(false);
+  const isFirstMount = useRef(true);
   useEffect(() => {
-    if (!initialized) {
-      setInitialized(true);
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
       return;
     }
     localStorage.setItem('cart', JSON.stringify(state.items));
-  }, [state.items, initialized]);
+  }, [state.items]);
 
   const addItem = (product, quantity = 1, size = '', color = '') => {
     dispatch({ type: 'ADD_ITEM', payload: { ...product, quantity, size, color } });
