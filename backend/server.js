@@ -56,14 +56,16 @@ app.get('/', (req, res) => res.send('API is running...'));
 // Error handler
 app.use(errorHandler);
 
-const PORT = 5050; 
-const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
-});
+const PORT = process.env.PORT || 5050; 
+if (process.env.NODE_ENV !== 'test') {
+  const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
+  });
 
-process.on('unhandledRejection', (err) => {
-  console.error(`Unhandled Rejection: ${err.message}`);
-  server.close(() => process.exit(1));
-});
+  process.on('unhandledRejection', (err) => {
+    console.error(`Unhandled Rejection: ${err.message}`);
+    server.close(() => process.exit(1));
+  });
+}
 
 module.exports = app;
