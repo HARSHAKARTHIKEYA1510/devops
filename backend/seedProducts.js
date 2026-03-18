@@ -19,17 +19,38 @@ const categories = [
   { 
     name: 'Electronics', 
     sub: ['Laptops', 'Smartphones', 'Headphones', 'Cameras', 'Smartwatches', 'Speakers'],
-    imgKeyword: 'tech'
+    imageIds: [
+      '1498243667342-262147db602c', // Laptop
+      '1511706853205-01e4c000dfb5', // Phone
+      '1505740420928-5e560c06d30e', // Headphones
+      '1523275335684-37898b6baf30', // Watch
+      '1496181133206-80ce9b88a853', // Laptop back
+      '1461151351185-131103c80036'  // Camera
+    ]
   },
   { 
     name: 'Clothing', 
     sub: ['T-Shirts', 'Jeans', 'Jackets', 'Shirts', 'Sweaters', 'Trousers'],
-    imgKeyword: 'fashion'
+    imageIds: [
+      '1434389677639-e455e3477163', // White shirt
+      '1490481651871-ab68ff25d43d', // Hoodie
+      '1523381210434-271e8be1f52b', // Rack
+      '1551488831-00ddcb6c6bd3', // Jacket
+      '1544441893-675973e3a985', // Table layout
+      '1618354691373-d851c5c3a990'  // T-shirt
+    ]
   },
   { 
     name: 'Footwear', 
     sub: ['Sneakers', 'Boots', 'Loafers', 'Sandals', 'Running Shoes', 'Formal Shoes'],
-    imgKeyword: 'shoes'
+    imageIds: [
+      '1542272604-787c3835533d', // Sneaker
+      '1606107557195-0e29a4b5b4aa', // Formal
+      '1560769629-975ec94e6a86', // Shoe stack
+      '1512374382149-43326102606a', // High tops
+      '1595950653106-6c9ebd614d3a', // Stylish
+      '1600185365483-26d7a4cc7519'  // Casual
+    ]
   }
 ];
 
@@ -49,6 +70,11 @@ const generateProducts = () => {
     const sub = cat.sub[Math.floor(Math.random() * cat.sub.length)];
     const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
     const brand = brands[Math.floor(Math.random() * brands.length)];
+    
+    // Pick a high-quality ID and add variations via Unsplash API params
+    const imageId = cat.imageIds[i % cat.imageIds.length];
+    const imageUrl = `https://images.unsplash.com/photo-${imageId}?auto=format&fit=crop&w=800&q=80&mod=${i}`;
+
     const basePrice = cat.name === 'Electronics' 
       ? Math.floor(Math.random() * 80000) + 5000 
       : Math.floor(Math.random() * 5000) + 500;
@@ -59,7 +85,7 @@ const generateProducts = () => {
     products.push({
       name,
       slug: generateSlug(name),
-      description: `Elevate your lifestyle with the ${name}. This high-quality product from ${brand} is designed for maximum performance and style. Whether for work or leisure, it delivers reliability you can count on.`,
+      description: `Elevate your lifestyle with the ${name}. This high-quality product from ${brand} is designed for maximum performance and style. Whether for work or leisure, it delivers reliability you can count on. Featuring a premium monochrome aesthetic that fits any modern environment.`,
       shortDescription: `A premium ${sub.toLowerCase()} for discerning users.`,
       price: price,
       originalPrice: discount > 0 ? basePrice : undefined,
@@ -71,8 +97,7 @@ const generateProducts = () => {
       isFeatured: Math.random() > 0.85,
       rating: parseFloat((Math.random() * 2 + 3).toFixed(1)),
       numReviews: Math.floor(Math.random() * 300) + 10,
-      // Using LoremFlickr for reliable category-specific images
-      images: [{ url: `https://loremflickr.com/800/800/${cat.imgKeyword}?lock=${i}` }],
+      images: [{ url: imageUrl }],
       isActive: true,
       colors: ['Black', 'White', 'Midnight', 'Slate'],
       sizes: cat.name === 'Electronics' ? [] : ['S', 'M', 'L', 'XL', 'XXL', '10', '11', '12']
