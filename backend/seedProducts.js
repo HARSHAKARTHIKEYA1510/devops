@@ -16,16 +16,25 @@ const connectDB = async () => {
 };
 
 const categories = [
-  { name: 'Electronics', sub: ['Laptops', 'Smartphones', 'Headphones', 'Cameras', 'Tablets'] },
-  { name: 'Fashion', sub: ['T-Shirts', 'Jeans', 'Sneakers', 'Watches', 'Handbags'] },
-  { name: 'Home & Living', sub: ['Furniture', 'Decor', 'Kitchen', 'Bedding', 'Lighting'] },
-  { name: 'Sports', sub: ['Running', 'Gym', 'Cycling', 'Outdoor', 'Team Sports'] },
-  { name: 'Beauty', sub: ['Skincare', 'Makeup', 'Haircare', 'Fragrance', 'Tools'] },
-  { name: 'Books', sub: ['Fiction', 'Non-Fiction', 'Sci-Fi', 'Biography', 'Self-Help'] }
+  { 
+    name: 'Electronics', 
+    sub: ['Laptops', 'Smartphones', 'Headphones', 'Cameras', 'Smartwatches', 'Speakers'],
+    imgKeyword: 'tech'
+  },
+  { 
+    name: 'Clothing', 
+    sub: ['T-Shirts', 'Jeans', 'Jackets', 'Shirts', 'Sweaters', 'Trousers'],
+    imgKeyword: 'fashion'
+  },
+  { 
+    name: 'Footwear', 
+    sub: ['Sneakers', 'Boots', 'Loafers', 'Sandals', 'Running Shoes', 'Formal Shoes'],
+    imgKeyword: 'shoes'
+  }
 ];
 
-const adjectives = ['Premium', 'Luxury', 'Essential', 'Modern', 'Classic', 'Ultimate', 'Smart', 'Elegant', 'Durable', 'Lightweight'];
-const brands = ['TechPro', 'StyleCo', 'HomeBase', 'ActiveLive', 'PureGlow', 'ReadWell'];
+const adjectives = ['Premium', 'Luxury', 'Essential', 'Modern', 'Classic', 'Ultimate', 'Smart', 'Elegant', 'Durable', 'Lightweight', 'Urban', 'Pro', 'Elite'];
+const brands = ['TechPro', 'StyleCo', 'VogueFit', 'ActiveLive', 'Nordic', 'EliteGear', 'Prime'];
 
 const generateSlug = (name) => {
   return name.toLowerCase()
@@ -40,28 +49,33 @@ const generateProducts = () => {
     const sub = cat.sub[Math.floor(Math.random() * cat.sub.length)];
     const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
     const brand = brands[Math.floor(Math.random() * brands.length)];
-    const basePrice = Math.floor(Math.random() * 5000) + 200;
+    const basePrice = cat.name === 'Electronics' 
+      ? Math.floor(Math.random() * 80000) + 5000 
+      : Math.floor(Math.random() * 5000) + 500;
     const discount = Math.random() > 0.7 ? Math.floor(Math.random() * 40) + 10 : 0;
     const price = Math.round(basePrice * (1 - discount / 100));
-    const name = `${adj} ${sub.slice(0, -1)} ${i}`;
+    const name = `${adj} ${sub} ${i}`;
 
     products.push({
       name,
       slug: generateSlug(name),
-      description: `Higher definition and better performance. This ${sub.toLowerCase()} is perfect for your everyday needs. Featuring advanced technology and sleek design, the ${adj} series offers unparalleled value.`,
-      shortDescription: `A high-quality ${sub.toLowerCase()} for the modern lifestyle.`,
+      description: `Elevate your lifestyle with the ${name}. This high-quality product from ${brand} is designed for maximum performance and style. Whether for work or leisure, it delivers reliability you can count on.`,
+      shortDescription: `A premium ${sub.toLowerCase()} for discerning users.`,
       price: price,
       originalPrice: discount > 0 ? basePrice : undefined,
       discount: discount,
       category: cat.name,
       subcategory: sub,
       brand: brand,
-      stock: Math.floor(Math.random() * 100) + 5,
+      stock: Math.floor(Math.random() * 100) + 10,
       isFeatured: Math.random() > 0.85,
       rating: parseFloat((Math.random() * 2 + 3).toFixed(1)),
-      numReviews: Math.floor(Math.random() * 200),
-      images: [{ url: `https://picsum.photos/seed/${i}/400/300` }],
-      isActive: true
+      numReviews: Math.floor(Math.random() * 300) + 10,
+      // Using Unsplash source for more relevant category images
+      images: [{ url: `https://images.unsplash.com/photo-${i}?auto=format&fit=crop&w=800&q=60&sig=${i}&${cat.imgKeyword}` }],
+      isActive: true,
+      colors: ['Black', 'White', 'Midnight', 'Slate'],
+      sizes: cat.name === 'Electronics' ? [] : ['S', 'M', 'L', 'XL', 'XXL', '10', '11', '12']
     });
   }
   return products;

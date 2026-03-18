@@ -29,7 +29,7 @@ export default function Footer() {
 
           {/* Links */}
           {[
-            { title: 'Shop', links: [['Products', '/products'], ['Featured', '/products?isFeatured=true'], ['Electronics', '/products?category=Electronics'], ['Fashion', '/products?category=Fashion'], ['Home & Living', '/products?category=Home']] },
+            { title: 'Shop', links: [['Products', '/products'], ['Featured', '/products?isFeatured=true'], ['Electronics', '/products?category=Electronics'], ['Clothing', '/products?category=Clothing'], ['Footwear', '/products?category=Footwear']] },
             { title: 'Account', links: [['Login', '/auth/login'], ['Register', '/auth/register'], ['My Orders', '/orders'], ['Wishlist', '/wishlist'], ['Profile', '/profile']] },
             { title: 'Support', links: [['FAQ', '#'], ['Shipping Info', '#'], ['Return Policy', '#'], ['Track Order', '#'], ['Contact Us', '#']] },
           ].map(({ title, links }) => (

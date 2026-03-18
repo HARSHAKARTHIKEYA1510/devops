@@ -36,7 +36,7 @@ export default function Navbar() {
 
         {/* Nav Links - Desktop */}
         <div style={{ display: 'flex', gap: '0.25rem', flex: 1 }} className="nav-links-desktop">
-          {[['/', 'Home'], ['/products', 'Products'], ['/products?isFeatured=true', 'Featured'], ['/products?category=Electronics', 'Electronics'], ['/products?category=Fashion', 'Fashion']].map(([href, label]) => (
+          {[['/', 'Home'], ['/products', 'Products'], ['/products?isFeatured=true', 'Featured'], ['/products?category=Electronics', 'Electronics'], ['/products?category=Clothing', 'Clothing'], ['/products?category=Footwear', 'Footwear']].map(([href, label]) => (
             <Link key={href} href={href} style={{ padding: '0.5rem 0.875rem', borderRadius: 10, color: 'rgba(255,255,255,0.7)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500, transition: 'all 0.2s', whiteSpace: 'nowrap' }}
               onMouseEnter={(e) => { e.target.style.color = '#fff'; e.target.style.background = 'rgba(255,255,255,0.06)'; }}
               onMouseLeave={(e) => { e.target.style.color = 'rgba(255,255,255,0.7)'; e.target.style.background = 'transparent'; }}>

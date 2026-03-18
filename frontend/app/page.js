@@ -36,11 +36,8 @@ const HERO_SLIDES = [
 
 const CATEGORIES = [
   { name: 'Electronics', emoji: '💻', color: '#ffffff', href: '/products?category=Electronics' },
-  { name: 'Fashion', emoji: '👗', color: '#ffffff', href: '/products?category=Fashion' },
-  { name: 'Home & Living', emoji: '🏠', color: '#ffffff', href: '/products?category=Home' },
-  { name: 'Sports', emoji: '⚽', color: '#ffffff', href: '/products?category=Sports' },
-  { name: 'Beauty', emoji: '✨', color: '#ffffff', href: '/products?category=Beauty' },
-  { name: 'Books', emoji: '📚', color: '#ffffff', href: '/products?category=Books' },
+  { name: 'Clothing', emoji: '👕', color: '#ffffff', href: '/products?category=Clothing' },
+  { name: 'Footwear', emoji: '👟', color: '#ffffff', href: '/products?category=Footwear' },
 ];
 
 const FEATURES = [
