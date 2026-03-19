@@ -12,7 +12,19 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Check for EC2 Secrets
+      id: check_secrets
+      shell: bash
+      run: |
+        if [ -n "${{ secrets.EC2_HOST }}" ] && [ -n "${{ secrets.EC2_SSH_KEY }}" ]; then
+          echo "secrets_present=true" >> $GITHUB_OUTPUT
+        else
+          echo "secrets_present=false" >> $GITHUB_OUTPUT
+          echo "::warning title=Missing Secrets::EC2_HOST or EC2_SSH_KEY not found in GitHub Secrets. Skipping deployment."
+        fi
+
     - name: Deploy to EC2 via SSH
+      if: steps.check_secrets.outputs.secrets_present == 'true'
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.EC2_HOST }}
@@ -46,3 +58,9 @@ jobs:
           pm2 start npm --name frontend -- start
           
           echo "✅ Deployment successful on EC2 at $(date)"
+
+    - name: Deployment Note (If skipped)
+      if: steps.check_secrets.outputs.secrets_present == 'false'
+      run: |
+        echo "The CD pipeline is correctly configured. To enable live deployment, add 'EC2_HOST', 'EC2_USERNAME', and 'EC2_SSH_KEY' to your GitHub Repository Secrets."
+
