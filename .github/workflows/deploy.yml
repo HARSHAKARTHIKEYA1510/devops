@@ -1,0 +1,48 @@
+name: CD Pipeline - EC2 Deployment
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_original_push_id != null || github.event_name == 'push'
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Deploy to EC2 via SSH
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        port: 22
+        script: |
+          # 10. Idempotent Scripts
+          mkdir -p ~/app/backend
+          mkdir -p ~/app/frontend
+          
+          # Navigate and Pull latest changes
+          cd ~/app
+          git pull origin main || git clone https://github.com/HARSHAKARTHIKEYA1510/devops.git .
+          
+          # Backend deployment (Idempotent)
+          cd ~/app/backend
+          npm install --production
+          
+          # 9. Execute Commands: Restart service (e.g. using pm2)
+          pm2 delete backend || true
+          pm2 start server.js --name backend
+          
+          # Frontend deployment
+          cd ~/app/frontend
+          npm install --production
+          npm run build
+          
+          # Restart frontend (e.g. using pm2)
+          pm2 delete frontend || true
+          pm2 start npm --name frontend -- start
+          
+          echo "✅ Deployment successful on EC2 at $(date)"
