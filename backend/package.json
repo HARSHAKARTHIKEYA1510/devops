@@ -28,9 +28,12 @@
     "multer": "^2.1.1",
     "stripe": "^20.4.1"
   },
+  "overrides": {
+    "eslint": "9.39.4"
+  },
   "devDependencies": {
-    "@eslint/js": "9.x",
-    "eslint": "9.x",
+    "@eslint/js": "9.39.4",
+    "eslint": "9.39.4",
     "globals": "^17.4.0",
     "jest": "^30.3.0",
     "jest-environment-node": "^30.3.0",

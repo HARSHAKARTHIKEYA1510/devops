@@ -12,7 +12,10 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [24.x]
+
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
     - uses: actions/checkout@v4
@@ -37,7 +40,7 @@ jobs:
 
     - name: Backend - Run Tests
       working-directory: ./backend
-      run: npm test -- --passWithNoTests || echo "No tests configured"
+      run: npm test
 
     - name: Frontend - Install Dependencies
       working-directory: ./frontend
@@ -49,7 +52,7 @@ jobs:
 
     - name: Frontend - Run Tests
       working-directory: ./frontend
-      run: npm test -- --passWithNoTests
+      run: npm test
 
     - name: Frontend - Build
       working-directory: ./frontend
