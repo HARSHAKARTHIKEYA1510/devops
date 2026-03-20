@@ -12,11 +12,13 @@
   },
   "dependencies": {
     "next": "16.1.7",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
   },
   "overrides": {
-    "eslint": "9.39.4"
+    "eslint": "9.39.4",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
