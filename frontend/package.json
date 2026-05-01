@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "jest --passWithNoTests",
+    "test:coverage": "jest --coverage --coverageReporters=html --coverageReporters=json-summary",
     "test:e2e": "playwright test"
   },
   "dependencies": {

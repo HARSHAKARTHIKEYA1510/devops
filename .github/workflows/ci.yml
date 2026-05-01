@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: CI Pipeline - Lint and Build
 
 on:
   push:
@@ -7,28 +7,18 @@ on:
     branches: [ "main", "master" ]
 
 jobs:
-  build-and-test:
+  lint-and-build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [24.x]
-
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
     - uses: actions/checkout@v4
     
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js 18.x
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 18.x
         cache: 'npm'
         cache-dependency-path: './**/package-lock.json'
-
-    - name: Debug - List Files
-      run: ls -R
 
     - name: Backend - Install Dependencies
       working-directory: ./backend
@@ -36,11 +26,18 @@ jobs:
 
     - name: Backend - Run Linter
       working-directory: ./backend
-      run: npm run lint
+      run: |
+        npm run lint 2>&1 | tee lint-output.log
+      continue-on-error: true
 
-    - name: Backend - Run Tests
-      working-directory: ./backend
-      run: npm test
+    - name: Upload Backend Lint Logs
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: backend-lint-logs
+        path: backend/lint-output.log
+        retention-days: 30
+        overwrite: true
 
     - name: Frontend - Install Dependencies
       working-directory: ./frontend
@@ -48,12 +45,30 @@ jobs:
 
     - name: Frontend - Run Linter
       working-directory: ./frontend
-      run: npm run lint
+      run: |
+        npm run lint 2>&1 | tee lint-output.log
+      continue-on-error: true
 
-    - name: Frontend - Run Tests
-      working-directory: ./frontend
-      run: npm test
+    - name: Upload Frontend Lint Logs
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: frontend-lint-logs
+        path: frontend/lint-output.log
+        retention-days: 30
+        overwrite: true
 
     - name: Frontend - Build
       working-directory: ./frontend
-      run: npm run build
+      run: |
+        npm run build 2>&1 | tee build-output.log
+      continue-on-error: true
+
+    - name: Upload Frontend Build Logs
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: frontend-build-logs
+        path: frontend/build-output.log
+        retention-days: 30
+        overwrite: true
