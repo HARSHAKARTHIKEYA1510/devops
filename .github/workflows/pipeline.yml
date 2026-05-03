@@ -187,7 +187,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.6.0
+          terraform_version: 1.10.0
 
       - name: Terraform Format Check
         id: fmt
@@ -203,18 +203,21 @@ jobs:
 
       - name: Terraform Validate
         id: validate
+        if: steps.init.outcome == 'success'
         run: |
           echo "✅ Validating Terraform configuration..."
           terraform validate -no-color 2>&1 | tee terraform-validate-output.log
 
       - name: Terraform Plan
         id: plan
+        if: steps.validate.outcome == 'success'
         run: |
           echo "📋 Creating Terraform plan..."
           terraform plan -no-color -out=tfplan 2>&1 | tee terraform-plan-output.log
 
       - name: Terraform Apply
         id: apply
+        if: steps.plan.outcome == 'success'
         run: |
           echo "🚀 Applying Terraform — provisioning S3 bucket..."
           terraform apply -auto-approve tfplan 2>&1 | tee terraform-apply-output.log
@@ -232,7 +235,11 @@ jobs:
         if: steps.apply.outcome == 'success'
         run: |
           echo "🔍 Verifying S3 bucket creation..."
-          BUCKET_NAME=$(terraform output -raw bucket_name)
+          BUCKET_NAME=$(terraform output -raw bucket_name 2>/dev/null)
+          if [ -z "$BUCKET_NAME" ]; then
+            echo "::error::Could not retrieve bucket name from Terraform output"
+            exit 1
+          fi
           echo "Bucket Name: $BUCKET_NAME"
           aws s3 ls s3://$BUCKET_NAME 2>&1 | tee s3-verify-output.log || echo "Bucket exists but is empty — OK"
           echo "✅ S3 bucket verified!"
@@ -291,6 +298,7 @@ jobs:
           path: terraform/terraform-output.log
           retention-days: 30
           overwrite: true
+          if-no-files-found: ignore
 
       - name: Upload S3 Verify Logs
         uses: actions/upload-artifact@v4
@@ -300,6 +308,7 @@ jobs:
           path: terraform/s3-verify-output.log
           retention-days: 30
           overwrite: true
+          if-no-files-found: ignore
 
       # ── PR Comment with Plan ──────────────────────────────
       - name: Comment PR with Terraform Plan
