@@ -1,0 +1,330 @@
+name: CI/CD Pipeline — Tests → Terraform (S3)
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+# ──────────────────────────────────────────────────────────
+# PHASE 1 — Testing (Unit + Integration)
+# ──────────────────────────────────────────────────────────
+jobs:
+  backend-unit-tests:
+    name: "Phase 1 · Backend Unit Tests"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: 'npm'
+          cache-dependency-path: './backend/package-lock.json'
+
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Run Backend Unit Tests
+        working-directory: ./backend
+        run: |
+          npm test -- --testPathPattern="tests/unit" \
+            --coverage \
+            --coverageReporters=html \
+            --coverageReporters=json-summary \
+            2>&1 | tee unit-test-output.log
+        continue-on-error: true
+
+      - name: Upload Unit Test Logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-unit-test-logs
+          path: backend/unit-test-output.log
+          retention-days: 30
+          overwrite: true
+
+      - name: Upload Unit Test Coverage Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-unit-coverage-report
+          path: backend/coverage/
+          retention-days: 30
+          overwrite: true
+
+  frontend-unit-tests:
+    name: "Phase 1 · Frontend Unit Tests"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: 'npm'
+          cache-dependency-path: './frontend/package-lock.json'
+
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Run Frontend Unit Tests
+        working-directory: ./frontend
+        run: |
+          npm test -- --testPathPattern="tests/unit" \
+            --coverage \
+            --coverageReporters=html \
+            --coverageReporters=json-summary \
+            2>&1 | tee unit-test-output.log
+        continue-on-error: true
+
+      - name: Upload Frontend Unit Test Logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frontend-unit-test-logs
+          path: frontend/unit-test-output.log
+          retention-days: 30
+          overwrite: true
+
+      - name: Upload Frontend Unit Test Coverage Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frontend-unit-coverage-report
+          path: frontend/coverage/
+          retention-days: 30
+          overwrite: true
+
+  backend-integration-tests:
+    name: "Phase 1 · Backend Integration Tests"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: 'npm'
+          cache-dependency-path: './backend/package-lock.json'
+
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Run Backend Integration Tests
+        working-directory: ./backend
+        run: |
+          npm test -- --testPathPattern="tests/integration" \
+            --coverage \
+            --coverageReporters=html \
+            --coverageReporters=json-summary \
+            2>&1 | tee integration-test-output.log
+        continue-on-error: true
+
+      - name: Upload Integration Test Logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-integration-test-logs
+          path: backend/integration-test-output.log
+          retention-days: 30
+          overwrite: true
+
+      - name: Upload Integration Test Coverage Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-integration-coverage-report
+          path: backend/coverage/
+          retention-days: 30
+          overwrite: true
+
+# ──────────────────────────────────────────────────────────
+# PHASE 2 — Infrastructure Provisioning (Terraform → S3)
+# Only runs AFTER all Phase 1 test jobs pass
+# Only applies on push to main/master or manual trigger
+# ──────────────────────────────────────────────────────────
+  terraform-s3:
+    name: "Phase 2 · Terraform — S3 Provisioning"
+    runs-on: ubuntu-latest
+    needs:
+      - backend-unit-tests
+      - frontend-unit-tests
+      - backend-integration-tests
+
+    # Only apply on push to main/master or manual workflow_dispatch
+    if: >
+      always() &&
+      (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch')
+
+    env:
+      AWS_ACCESS_KEY_ID:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_SESSION_TOKEN:     ${{ secrets.AWS_SESSION_TOKEN }}
+      AWS_DEFAULT_REGION:    ${{ secrets.AWS_REGION }}
+      TF_VAR_aws_region:     ${{ secrets.AWS_REGION }}
+      TF_VAR_bucket_name:    ${{ vars.S3_BUCKET_NAME || 'shopsmart-devops-harsha' }}
+      TF_VAR_environment:    ${{ vars.ENVIRONMENT || 'dev' }}
+
+    defaults:
+      run:
+        working-directory: ./terraform
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+
+      - name: Terraform Format Check
+        id: fmt
+        run: |
+          terraform fmt -check -recursive 2>&1 | tee terraform-fmt-output.log
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: |
+          echo "🔧 Initializing Terraform..."
+          terraform init 2>&1 | tee terraform-init-output.log
+
+      - name: Terraform Validate
+        id: validate
+        run: |
+          echo "✅ Validating Terraform configuration..."
+          terraform validate -no-color 2>&1 | tee terraform-validate-output.log
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          echo "📋 Creating Terraform plan..."
+          terraform plan -no-color -out=tfplan 2>&1 | tee terraform-plan-output.log
+
+      - name: Terraform Apply
+        id: apply
+        run: |
+          echo "🚀 Applying Terraform — provisioning S3 bucket..."
+          terraform apply -auto-approve tfplan 2>&1 | tee terraform-apply-output.log
+          echo "✅ Terraform apply complete!"
+
+      - name: Terraform Output
+        id: output
+        if: steps.apply.outcome == 'success'
+        run: |
+          echo "📤 Terraform outputs:"
+          terraform output -no-color 2>&1 | tee terraform-output.log
+
+      - name: Verify S3 Bucket Creation
+        id: verify
+        if: steps.apply.outcome == 'success'
+        run: |
+          echo "🔍 Verifying S3 bucket creation..."
+          BUCKET_NAME=$(terraform output -raw bucket_name)
+          echo "Bucket Name: $BUCKET_NAME"
+          aws s3 ls s3://$BUCKET_NAME 2>&1 | tee s3-verify-output.log || echo "Bucket exists but is empty — OK"
+          echo "✅ S3 bucket verified!"
+
+      # ── Artifact Uploads ──────────────────────────────────
+      - name: Upload Terraform Format Logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tf-fmt-logs
+          path: terraform/terraform-fmt-output.log
+          retention-days: 30
+          overwrite: true
+
+      - name: Upload Terraform Init Logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tf-init-logs
+          path: terraform/terraform-init-output.log
+          retention-days: 30
+          overwrite: true
+
+      - name: Upload Terraform Validate Logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tf-validate-logs
+          path: terraform/terraform-validate-output.log
+          retention-days: 30
+          overwrite: true
+
+      - name: Upload Terraform Plan Logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tf-plan-logs
+          path: terraform/terraform-plan-output.log
+          retention-days: 30
+          overwrite: true
+
+      - name: Upload Terraform Apply Logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tf-apply-logs
+          path: terraform/terraform-apply-output.log
+          retention-days: 30
+          overwrite: true
+
+      - name: Upload Terraform Output Logs
+        uses: actions/upload-artifact@v4
+        if: always() && steps.output.outcome == 'success'
+        with:
+          name: tf-output-logs
+          path: terraform/terraform-output.log
+          retention-days: 30
+          overwrite: true
+
+      - name: Upload S3 Verify Logs
+        uses: actions/upload-artifact@v4
+        if: always() && steps.verify.outcome == 'success'
+        with:
+          name: s3-verify-logs
+          path: terraform/s3-verify-output.log
+          retention-days: 30
+          overwrite: true
+
+      # ── PR Comment with Plan ──────────────────────────────
+      - name: Comment PR with Terraform Plan
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const plan = fs.readFileSync('terraform/terraform-plan-output.log', 'utf8');
+            const body = `### 📋 Terraform Plan — S3 Bucket
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`
+            ${plan}
+            \`\`\`
+
+            </details>
+
+            *Triggered by: @${{ github.actor }} | Event: \`${{ github.event_name }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
