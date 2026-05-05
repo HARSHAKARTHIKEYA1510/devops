@@ -232,9 +232,12 @@ jobs:
             fi
           }
           
-          # S3 Bucket
+          # S3 Bucket and related configurations
           if aws s3api head-bucket --bucket ${{ env.TF_VAR_bucket_name }} 2>/dev/null; then
             import_if_exists aws_s3_bucket.app_bucket ${{ env.TF_VAR_bucket_name }}
+            import_if_exists aws_s3_bucket_versioning.app_bucket_versioning ${{ env.TF_VAR_bucket_name }}
+            import_if_exists aws_s3_bucket_server_side_encryption_configuration.app_bucket_encryption ${{ env.TF_VAR_bucket_name }}
+            import_if_exists aws_s3_bucket_public_access_block.app_bucket_public_access_block ${{ env.TF_VAR_bucket_name }}
           fi
           
           # ECR Repositories
@@ -262,6 +265,14 @@ jobs:
           SG_ID=$(aws ec2 describe-security-groups --filters Name=group-name,Values=devops-ecs-tasks-sg --region ${{ env.AWS_DEFAULT_REGION }} --query 'SecurityGroups[0].GroupId' --output text 2>/dev/null || true)
           if [ -n "$SG_ID" ] && [ "$SG_ID" != "None" ]; then
             import_if_exists aws_security_group.ecs_tasks "$SG_ID"
+          fi
+          
+          # ECS Services
+          if aws ecs describe-services --cluster devops-cluster --services devops-frontend-service --region ${{ env.AWS_DEFAULT_REGION }} --query 'services[0].status' --output text 2>/dev/null | grep -E "ACTIVE|DRAINING"; then
+            import_if_exists aws_ecs_service.frontend devops-cluster/devops-frontend-service
+          fi
+          if aws ecs describe-services --cluster devops-cluster --services devops-backend-service --region ${{ env.AWS_DEFAULT_REGION }} --query 'services[0].status' --output text 2>/dev/null | grep -E "ACTIVE|DRAINING"; then
+            import_if_exists aws_ecs_service.backend devops-cluster/devops-backend-service
           fi
 
       - name: Terraform Validate
