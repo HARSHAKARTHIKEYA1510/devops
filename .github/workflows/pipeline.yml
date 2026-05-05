@@ -198,12 +198,70 @@ jobs:
           terraform fmt -check -recursive 2>&1 | tee terraform-fmt-output.log
         continue-on-error: true
 
+      - name: Setup Terraform State Bucket
+        run: |
+          STATE_BUCKET="tf-state-${{ github.repository_owner }}-devops"
+          if ! aws s3api head-bucket --bucket $STATE_BUCKET 2>/dev/null; then
+            echo "Creating state bucket: $STATE_BUCKET"
+            aws s3 mb s3://$STATE_BUCKET --region ${{ env.AWS_DEFAULT_REGION }} || true
+          fi
+          echo "STATE_BUCKET=$STATE_BUCKET" >> $GITHUB_ENV
+
       - name: Terraform Init
         id: init
         run: |
           echo "🔧 Initializing Terraform..."
-          terraform init 2>&1 | tee terraform-init-output.log
+          terraform init \
+            -backend-config="bucket=${{ env.STATE_BUCKET }}" \
+            -backend-config="key=devops/terraform.tfstate" \
+            -backend-config="region=${{ env.AWS_DEFAULT_REGION }}" \
+            2>&1 | tee terraform-init-output.log
           exit ${PIPESTATUS[0]}
+
+      - name: Import Existing Resources
+        if: steps.init.outcome == 'success'
+        run: |
+          echo "🔄 Importing existing resources to ensure idempotency..."
+          import_if_exists() {
+            local resource=$1
+            local id=$2
+            if ! terraform state list | grep -q "$resource"; then
+              echo "Importing $resource with ID $id..."
+              terraform import "$resource" "$id" || echo "Failed to import $resource, continuing..."
+            fi
+          }
+          
+          # S3 Bucket
+          if aws s3api head-bucket --bucket ${{ env.TF_VAR_bucket_name }} 2>/dev/null; then
+            import_if_exists aws_s3_bucket.app_bucket ${{ env.TF_VAR_bucket_name }}
+          fi
+          
+          # ECR Repositories
+          if aws ecr describe-repositories --repository-names devops-frontend --region ${{ env.AWS_DEFAULT_REGION }} 2>/dev/null; then
+            import_if_exists aws_ecr_repository.frontend devops-frontend
+          fi
+          if aws ecr describe-repositories --repository-names devops-backend --region ${{ env.AWS_DEFAULT_REGION }} 2>/dev/null; then
+            import_if_exists aws_ecr_repository.backend devops-backend
+          fi
+          
+          # ECS Cluster
+          if aws ecs describe-clusters --clusters devops-cluster --region ${{ env.AWS_DEFAULT_REGION }} --query 'clusters[0].status' --output text 2>/dev/null | grep -q ACTIVE; then
+            import_if_exists aws_ecs_cluster.main devops-cluster
+          fi
+          
+          # Log Groups
+          if aws logs describe-log-groups --log-group-name-prefix /ecs/devops-frontend --region ${{ env.AWS_DEFAULT_REGION }} | grep -q '"logGroupName": "/ecs/devops-frontend"'; then
+            import_if_exists aws_cloudwatch_log_group.frontend_logs /ecs/devops-frontend
+          fi
+          if aws logs describe-log-groups --log-group-name-prefix /ecs/devops-backend --region ${{ env.AWS_DEFAULT_REGION }} | grep -q '"logGroupName": "/ecs/devops-backend"'; then
+            import_if_exists aws_cloudwatch_log_group.backend_logs /ecs/devops-backend
+          fi
+          
+          # Security Group
+          SG_ID=$(aws ec2 describe-security-groups --filters Name=group-name,Values=devops-ecs-tasks-sg --region ${{ env.AWS_DEFAULT_REGION }} --query 'SecurityGroups[0].GroupId' --output text 2>/dev/null || true)
+          if [ -n "$SG_ID" ] && [ "$SG_ID" != "None" ]; then
+            import_if_exists aws_security_group.ecs_tasks "$SG_ID"
+          fi
 
       - name: Terraform Validate
         id: validate
