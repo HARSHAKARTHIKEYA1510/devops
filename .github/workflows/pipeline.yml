@@ -200,10 +200,11 @@ jobs:
 
       - name: Setup Terraform State Bucket
         run: |
-          STATE_BUCKET="tf-state-${{ github.repository_owner }}-devops"
+          RAW_BUCKET="tf-state-${{ github.repository_owner }}-devops"
+          STATE_BUCKET=$(echo "$RAW_BUCKET" | tr '[:upper:]' '[:lower:]')
           if ! aws s3api head-bucket --bucket $STATE_BUCKET 2>/dev/null; then
             echo "Creating state bucket: $STATE_BUCKET"
-            aws s3 mb s3://$STATE_BUCKET --region ${{ env.AWS_DEFAULT_REGION }} || true
+            aws s3 mb s3://$STATE_BUCKET --region ${{ env.AWS_DEFAULT_REGION }}
           fi
           echo "STATE_BUCKET=$STATE_BUCKET" >> $GITHUB_ENV
 
