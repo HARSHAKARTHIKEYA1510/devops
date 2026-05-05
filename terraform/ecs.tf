@@ -114,6 +114,11 @@ resource "aws_ecs_service" "backend" {
     container_name   = "backend"
     container_port   = 5050
   }
+
+  depends_on = [
+    aws_lb_listener.http,
+    aws_lb_listener_rule.backend
+  ]
 }
 
 # Frontend Service
@@ -135,4 +140,8 @@ resource "aws_ecs_service" "frontend" {
     container_name   = "frontend"
     container_port   = 3000
   }
+
+  depends_on = [
+    aws_lb_listener.http
+  ]
 }
