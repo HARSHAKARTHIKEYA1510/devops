@@ -108,6 +108,12 @@ resource "aws_ecs_service" "backend" {
     security_groups  = [aws_security_group.ecs_tasks.id]
     assign_public_ip = true
   }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.backend.arn
+    container_name   = "backend"
+    container_port   = 5050
+  }
 }
 
 # Frontend Service
@@ -122,5 +128,11 @@ resource "aws_ecs_service" "frontend" {
     subnets          = data.aws_subnets.default.ids
     security_groups  = [aws_security_group.ecs_tasks.id]
     assign_public_ip = true
+  }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.frontend.arn
+    container_name   = "frontend"
+    container_port   = 3000
   }
 }

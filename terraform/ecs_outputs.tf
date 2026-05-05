@@ -22,3 +22,8 @@ output "frontend_service_name" {
   description = "Frontend ECS Service Name"
   value       = aws_ecs_service.frontend.name
 }
+
+output "application_url" {
+  description = "The unified ALB URL to access the Frontend and Backend API"
+  value       = "http://${aws_lb.main.dns_name}"
+}
