@@ -40,7 +40,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload Unit Test Logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: backend-unit-test-logs
@@ -49,7 +49,7 @@ jobs:
           overwrite: true
 
       - name: Upload Unit Test Coverage Report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: backend-unit-coverage-report
@@ -86,7 +86,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload Frontend Unit Test Logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: frontend-unit-test-logs
@@ -95,7 +95,7 @@ jobs:
           overwrite: true
 
       - name: Upload Frontend Unit Test Coverage Report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: frontend-unit-coverage-report
@@ -132,7 +132,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload Integration Test Logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: backend-integration-test-logs
@@ -141,7 +141,7 @@ jobs:
           overwrite: true
 
       - name: Upload Integration Test Coverage Report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: backend-integration-coverage-report
@@ -327,7 +327,7 @@ jobs:
 
       # ── Artifact Uploads ──────────────────────────────────
       - name: Upload Terraform Format Logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: tf-fmt-logs
@@ -336,7 +336,7 @@ jobs:
           overwrite: true
 
       - name: Upload Terraform Init Logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: tf-init-logs
@@ -345,7 +345,7 @@ jobs:
           overwrite: true
 
       - name: Upload Terraform Validate Logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: tf-validate-logs
@@ -354,7 +354,7 @@ jobs:
           overwrite: true
 
       - name: Upload Terraform Plan Logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: tf-plan-logs
@@ -363,7 +363,7 @@ jobs:
           overwrite: true
 
       - name: Upload Terraform Apply Logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: tf-apply-logs
@@ -372,7 +372,7 @@ jobs:
           overwrite: true
 
       - name: Upload Terraform Output Logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always() && steps.output.outcome == 'success'
         with:
           name: tf-output-logs
@@ -382,7 +382,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Upload S3 Verify Logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always() && steps.verify.outcome == 'success'
         with:
           name: s3-verify-logs
