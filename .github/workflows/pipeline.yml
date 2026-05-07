@@ -186,7 +186,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: 1.10.0
           # Disable wrapper so terraform exit codes are not swallowed by the action
